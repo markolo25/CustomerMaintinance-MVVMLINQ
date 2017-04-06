@@ -107,6 +107,9 @@ namespace CustomerMaintinence_MVVM.ViewModel
         public AddMod windowType;
         public Customer customer;
 
+        /// <summary>
+        /// Creates a AddModViewModel
+        /// </summary>
         public AddModViewModel()
         {
             Messenger.Default.Register<AddMod>(this, recieve);
@@ -118,6 +121,11 @@ namespace CustomerMaintinence_MVVM.ViewModel
             States = (stateQuery.ToList());
         }
 
+        /// <summary>
+        /// Fills in all of the text boxes
+        /// with data of the selectedCustomer
+        /// </summary>
+        /// <param name="selectedCustomer"></param>
         private void DisplayCustomer(Customer selectedCustomer)
         {
             Name = selectedCustomer.Name;
@@ -128,6 +136,10 @@ namespace CustomerMaintinence_MVVM.ViewModel
         }
 
 
+        /// <summary>
+        /// Fills in a customer object with currently filled in values.
+        /// </summary>
+        /// <param name="customer"></param>
         private void PutCustomerData(Customer customer)
         {
             customer.Name = Name;
@@ -137,6 +149,9 @@ namespace CustomerMaintinence_MVVM.ViewModel
             customer.ZipCode = Zip;
         }
 
+        /// <summary>
+        /// Clears up the textboxes in the child window
+        /// </summary>
         private void ClearControls()
         {
             Name = "";
@@ -147,6 +162,10 @@ namespace CustomerMaintinence_MVVM.ViewModel
         }
 
 
+        /// <summary>
+        /// Message Handler for the class
+        /// </summary>
+        /// <param name="obj"></param>
         private void recieve(AddMod obj)
         {
             windowType = obj;
@@ -168,11 +187,17 @@ namespace CustomerMaintinence_MVVM.ViewModel
             }
         }
 
+        /// <summary>
+        /// Handles the Cancel Button Functions
+        /// </summary>
         private void CancelCommand()
         {
             CloseWindow();
         }
 
+        /// <summary>
+        /// Handles Accept Button Functions
+        /// </summary>
         private void AcceptCommand()
         {
             if (windowType.isMod)
@@ -189,6 +214,20 @@ namespace CustomerMaintinence_MVVM.ViewModel
                 catch (DbUpdateConcurrencyException ex)
                 {
                     ex.Entries.Single().Reload();
+                    if (MMABooksEntity.MMABooks.Entry(customer).State == System.Data.EntityState.Detached)
+                    {
+                        MessageBox.Show("The Data Has Been Deleted by another");
+                        ClearControls();
+                    }
+                    if (MMABooksEntity.MMABooks.Entry(customer).State == System.Data.EntityState.Unchanged)
+                    {
+                        MessageBox.Show("The Data has been modified by another");
+                        DisplayCustomer(customer);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unknown Concurrency Error");
+                    }
                 }
 
 
@@ -227,6 +266,9 @@ namespace CustomerMaintinence_MVVM.ViewModel
             return;
         }
 
+        /// <summary>
+        /// Closes the window by sending a message to the parent class
+        /// </summary>
         private void CloseWindow()
         {
             ClearControls();

@@ -33,3 +33,4 @@ C:\Users\Mark Mendoza\Documents\Visual Studio 2015\Projects\CustomerMaintinence-
 C:\Users\Mark Mendoza\Documents\Visual Studio 2015\Projects\CustomerMaintinence-MVVM\CustomerMaintinence-MVVM\obj\Debug\CustomerMaintinence-MVVM.csproj.GenerateResource.Cache
 C:\Users\Mark Mendoza\Documents\Visual Studio 2015\Projects\CustomerMaintinence-MVVM\CustomerMaintinence-MVVM\obj\Debug\CustomerMaintinence-MVVM.exe
 C:\Users\Mark Mendoza\Documents\Visual Studio 2015\Projects\CustomerMaintinence-MVVM\CustomerMaintinence-MVVM\obj\Debug\CustomerMaintinence-MVVM.pdb
+C:\Users\Mark Mendoza\Documents\Visual Studio 2015\Projects\CustomerMaintinence-MVVM\CustomerMaintinence-MVVM\obj\Debug\CustomerMaintinence-MVVM.csprojResolveAssemblyReference.cache

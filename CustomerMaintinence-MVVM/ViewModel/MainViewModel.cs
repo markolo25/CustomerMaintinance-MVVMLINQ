@@ -123,6 +123,10 @@ namespace CustomerMaintinence_MVVM.ViewModel
 
         }
 
+        /// <summary>
+        /// Fills in the properties bound the the view
+        /// with their respective properties in the Customer Class
+        /// </summary>
         private void DisplayCustomer()
         {
             Name = selectedCustomer.Name;
@@ -133,6 +137,9 @@ namespace CustomerMaintinence_MVVM.ViewModel
             selected = true;
         }
 
+        /// <summary>
+        /// Cleans up the properties the text boxes are bound to.
+        /// </summary>
         private void ClearControls()
         {
             CustomerID = 0;
@@ -144,6 +151,10 @@ namespace CustomerMaintinence_MVVM.ViewModel
             selected = false;
         }
 
+        /// <summary>
+        /// Queries the database for a customer using an ID as a
+        /// Primary Key
+        /// </summary>
         private void GetCustomerCommand()
         {
             try
@@ -155,7 +166,7 @@ namespace CustomerMaintinence_MVVM.ViewModel
                     where customer.CustomerID == CustomerID
                     select customer;
 
-                if(customerQuery.Count() > 0)
+                if (customerQuery.Count() > 0)
                 {
                     selectedCustomer = customerQuery.Single();
                 }
@@ -178,6 +189,10 @@ namespace CustomerMaintinence_MVVM.ViewModel
 
                 }
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                ex.Entries.Single().Reload();
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, ex.GetType().ToString());
@@ -187,11 +202,17 @@ namespace CustomerMaintinence_MVVM.ViewModel
 
         }
 
+        /// <summary>
+        /// Closes the program
+        /// </summary>
         private void ExitCommand()
         {
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Deletes the currently selected Customer.
+        /// </summary>
         private void DeleteCommand()
         {
             if (selected)
@@ -213,6 +234,12 @@ namespace CustomerMaintinence_MVVM.ViewModel
                     catch (DbUpdateConcurrencyException ex)
                     {
                         ex.Entries.Single().Reload();
+                        if(MMABooksEntity.MMABooks.Entry(selectedCustomer).State == System.Data.EntityState.Detached)
+                        {
+                            MessageBox.Show("The Data Has Been Deleted by another");
+                            ClearControls();
+                        }
+
                     }
 
                     catch (Exception ex)
@@ -227,6 +254,9 @@ namespace CustomerMaintinence_MVVM.ViewModel
             }
         }
 
+        /// <summary>
+        /// Calls a Child WIndow in order to modify the currently selected Customer
+        /// </summary>
         private void ModCommand()
         {
             if (selected)
@@ -243,6 +273,9 @@ namespace CustomerMaintinence_MVVM.ViewModel
         }
 
 
+        /// <summary>
+        /// calls a child window to create a new Customer
+        /// </summary>
         private void AddCommand()
         {
             _addmod = new AddModWIndow();
@@ -251,6 +284,10 @@ namespace CustomerMaintinence_MVVM.ViewModel
             _addmod.Show();
         }
 
+        /// <summary>
+        /// Handler class for the child window, that closes the child window and displays data
+        /// from the results of the actions performed in the child window
+        /// </summary>
         private void registerCloseWindow()
         {
             Messenger.Default.Register<Customer>(this, (nm) =>
