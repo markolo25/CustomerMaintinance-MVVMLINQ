@@ -184,7 +184,6 @@ namespace CustomerMaintinence_MVVM.ViewModel
                     {
                         MMABooksEntity.MMABooks.Entry(selectedCustomer).Reference("State1").Load();
                     }
-
                     DisplayCustomer();
 
                 }
@@ -299,7 +298,9 @@ namespace CustomerMaintinence_MVVM.ViewModel
                     selectedCustomer = nm;
                     DisplayCustomer();
                 }
-                
+                MMABooksEntity.MMABooks.Entry(selectedCustomer).Reload();
+                DisplayCustomer();
+
 
             });
             
