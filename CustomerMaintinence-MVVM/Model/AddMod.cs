@@ -12,17 +12,17 @@ namespace CustomerMaintinence_MVVM.Model
     public class AddMod
     {
         public Boolean isMod { get; set; }
-        public int CustomerID { get; set; }
+        public Customer sentCustomer { get; set; }
 
         /// <summary>
         /// Creates an AddMod Message Object
         /// </summary>
         /// <param name="isMod"></param>
         /// <param name="CustomerID"></param>
-        public AddMod(Boolean isMod, int CustomerID)
+        public AddMod(Boolean isMod, Customer sentCustomer)
         {
             this.isMod = isMod;
-            this.CustomerID = CustomerID;
+            this.sentCustomer = sentCustomer;
         }
     }
 }

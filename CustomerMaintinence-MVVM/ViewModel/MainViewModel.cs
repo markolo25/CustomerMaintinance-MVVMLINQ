@@ -129,7 +129,7 @@ namespace CustomerMaintinence_MVVM.ViewModel
         /// </summary>
         private void DisplayCustomer()
         {
-            try
+            if(MMABooksEntity.MMABooks.Entry(selectedCustomer).State != System.Data.EntityState.Detached)
             {
                 Name = selectedCustomer.Name;
                 Address = selectedCustomer.Address;
@@ -138,11 +138,12 @@ namespace CustomerMaintinence_MVVM.ViewModel
                 Zip = selectedCustomer.ZipCode;
                 selected = true;
             }
-            catch(Exception e)
+            else
             {
                 ClearControls();
+                selected = false;
             }
-          
+            
         }
 
         /// <summary>
@@ -271,8 +272,7 @@ namespace CustomerMaintinence_MVVM.ViewModel
                 _addmod = new AddModWIndow();
                 registerCloseWindow();
                 _addmod.Show();
-                Messenger.Default.Send<AddMod>(new AddMod(true, this.CustomerID));
-                Messenger.Default.Send<Customer>(this.selectedCustomer);
+                Messenger.Default.Send<AddMod>(new AddMod(true, selectedCustomer));
             }
             else
             {
@@ -288,7 +288,7 @@ namespace CustomerMaintinence_MVVM.ViewModel
         {
             _addmod = new AddModWIndow();
             registerCloseWindow();
-            Messenger.Default.Send<AddMod>(new AddMod(false, this.CustomerID));
+            Messenger.Default.Send<AddMod>(new AddMod(false, null));
             _addmod.Show();
         }
 
@@ -307,13 +307,7 @@ namespace CustomerMaintinence_MVVM.ViewModel
                     selectedCustomer = nm;
                     DisplayCustomer();
                 }
-                try
-                {
-                    MMABooksEntity.MMABooks.Entry(selectedCustomer).Reload();
-                }
-                catch (Exception e)
-                {
-                }
+                MMABooksEntity.MMABooks.Entry(selectedCustomer).Reload();
                 DisplayCustomer();
 
 

@@ -128,21 +128,11 @@ namespace CustomerMaintinence_MVVM.ViewModel
         /// <param name="selectedCustomer"></param>
         private void DisplayCustomer(Customer selectedCustomer)
         {
-            try
-            {
-                Name = selectedCustomer.Name;
-                Address = selectedCustomer.Address;
-                City = selectedCustomer.City;
-                SelectedState = selectedCustomer.State1.StateCode;
-                Zip = selectedCustomer.ZipCode;
-            }
-            catch(Exception e)
-            {
-                ClearControls();
-                MessageBox.Show("That user has been deleted");
-                CloseWindow();
-            }
-       
+            Name = selectedCustomer.Name;
+            Address = selectedCustomer.Address;
+            City = selectedCustomer.City;
+            SelectedState = selectedCustomer.State1.StateCode;
+            Zip = selectedCustomer.ZipCode;
         }
 
 
@@ -181,11 +171,8 @@ namespace CustomerMaintinence_MVVM.ViewModel
             windowType = obj;
             if (obj.isMod)
             {
-                    Title = "Modify Customer";
-                Messenger.Default.Register<Customer>(this, (cust) =>
-                 {
-                     customer = cust;
-                 });
+                Title = "Modify Customer";
+                customer = obj.sentCustomer;
                 if(customer == null)
                 {
                     CloseWindow();
@@ -234,7 +221,7 @@ namespace CustomerMaintinence_MVVM.ViewModel
                         MessageBox.Show("The Data Has Been Deleted by another");
                         ClearControls();
                     }
-                    if (MMABooksEntity.MMABooks.Entry(customer).State == System.Data.EntityState.Unchanged)
+                    else if (MMABooksEntity.MMABooks.Entry(customer).State == System.Data.EntityState.Unchanged)
                     {
                         MessageBox.Show("The Data has been modified by another");
                         DisplayCustomer(customer);
