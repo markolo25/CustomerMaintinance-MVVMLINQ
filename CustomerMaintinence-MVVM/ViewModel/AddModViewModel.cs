@@ -128,11 +128,21 @@ namespace CustomerMaintinence_MVVM.ViewModel
         /// <param name="selectedCustomer"></param>
         private void DisplayCustomer(Customer selectedCustomer)
         {
-            Name = selectedCustomer.Name;
-            Address = selectedCustomer.Address;
-            City = selectedCustomer.City;
-            SelectedState = selectedCustomer.State1.StateCode;
-            Zip = selectedCustomer.ZipCode;
+            try
+            {
+                Name = selectedCustomer.Name;
+                Address = selectedCustomer.Address;
+                City = selectedCustomer.City;
+                SelectedState = selectedCustomer.State1.StateCode;
+                Zip = selectedCustomer.ZipCode;
+            }
+            catch(Exception e)
+            {
+                ClearControls();
+                MessageBox.Show("That user has been deleted");
+                CloseWindow();
+            }
+       
         }
 
 
@@ -171,14 +181,16 @@ namespace CustomerMaintinence_MVVM.ViewModel
             windowType = obj;
             if (obj.isMod)
             {
-                Title = "Modify Customer";
-                var customerQuery =
-                    from customer in MMABooksEntity.MMABooks.Customers
-                    where customer.CustomerID == obj.CustomerID
-                    select customer;
-
-                customer = customerQuery.Single();
-                DisplayCustomer(this.customer);
+                    Title = "Modify Customer";
+                Messenger.Default.Register<Customer>(this, (cust) =>
+                 {
+                     customer = cust;
+                 });
+                if(customer == null)
+                {
+                    CloseWindow();
+                }
+                    DisplayCustomer(this.customer);
 
             }
             else
@@ -202,7 +214,10 @@ namespace CustomerMaintinence_MVVM.ViewModel
         {
             if (windowType.isMod)
             {
-                this.PutCustomerData(customer);
+                if(customer != null)
+                {
+                    this.PutCustomerData(customer);
+                }
                 try
                 {
                     // Update the database.

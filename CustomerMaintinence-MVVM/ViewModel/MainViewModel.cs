@@ -129,12 +129,20 @@ namespace CustomerMaintinence_MVVM.ViewModel
         /// </summary>
         private void DisplayCustomer()
         {
-            Name = selectedCustomer.Name;
-            Address = selectedCustomer.Address;
-            City = selectedCustomer.City;
-            State = selectedCustomer.State1.StateName;
-            Zip = selectedCustomer.ZipCode;
-            selected = true;
+            try
+            {
+                Name = selectedCustomer.Name;
+                Address = selectedCustomer.Address;
+                City = selectedCustomer.City;
+                State = selectedCustomer.State1.StateName;
+                Zip = selectedCustomer.ZipCode;
+                selected = true;
+            }
+            catch(Exception e)
+            {
+                ClearControls();
+            }
+          
         }
 
         /// <summary>
@@ -264,6 +272,7 @@ namespace CustomerMaintinence_MVVM.ViewModel
                 registerCloseWindow();
                 _addmod.Show();
                 Messenger.Default.Send<AddMod>(new AddMod(true, this.CustomerID));
+                Messenger.Default.Send<Customer>(this.selectedCustomer);
             }
             else
             {
@@ -298,7 +307,13 @@ namespace CustomerMaintinence_MVVM.ViewModel
                     selectedCustomer = nm;
                     DisplayCustomer();
                 }
-                MMABooksEntity.MMABooks.Entry(selectedCustomer).Reload();
+                try
+                {
+                    MMABooksEntity.MMABooks.Entry(selectedCustomer).Reload();
+                }
+                catch (Exception e)
+                {
+                }
                 DisplayCustomer();
 
 
